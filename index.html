@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyecto Escolar - Fenómeno del Niño y Súper Niño</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pastel: {
+                            sky: '#E0F2FE',        /* Azul cielo claro */
+                            ocean: '#BAE6FD',      /* Azul océano suave */
+                            deepSky: '#0284C7',    /* Azul acento */
+                            cream: '#FEF3C7',      /* Crema / Beige cálido */
+                            ochre: '#FDE68A',      /* Ocre suave */
+                            warmOrange: '#F97316', /* Naranja cálido acento */
+                            bg: '#FAF8F5',         /* Fondo crema neutro ultra suave */
+                            text: '#334155'        /* Texto pizarra oscuro */
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #FAF8F5;
+            color: #334155;
+        }
+        .soft-shadow {
+            box-shadow: 0 20px 40px -15px rgba(186, 230, 253, 0.4), 0 10px 20px -10px rgba(253, 230, 138, 0.3);
+        }
+        .float-animation {
+            animation: float 6s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-pastel-sky selection:text-pastel-deepSky">
+
+    <!-- ========================================================= -->
+    <!-- BARRA DE NAVEGACIÓN HORIZONTAL FUNCIONAL                  -->
+    <!-- ========================================================= -->
+    <header class="sticky top-0 z-50 w-full bg-white/90 backdrop-blur-md border-b border-slate-200/80 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-8 py-3.5 flex items-center justify-between">
+            
+            <!-- Logotipo / Título del Sitio -->
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="navegarA('inicio')">
+                <div class="p-2 bg-pastel-sky rounded-xl text-pastel-deepSky shadow-sm">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 001-9.999 5.002 5.002 0 00-9.78 2.096A4.001 4.001 0 003 15z"></path>
+                    </svg>
+                </div>
+                <span class="font-extrabold text-base sm:text-lg text-slate-800 tracking-tight">Geociencias & Clima</span>
+            </div>
+
+            <!-- Menú de Navegación Horizontal (Escritorio) -->
+            <nav class="hidden md:flex items-center space-x-2 bg-slate-100/80 p-1.5 rounded-2xl border border-slate-200/60">
+                <button id="nav-inicio" onclick="navegarA('inicio')" class="nav-btn px-5 py-2 rounded-xl text-sm font-bold transition-all bg-pastel-deepSky text-white shadow-sm">
+                    🏠 1. Portada / Inicio
+                </button>
+                <button id="nav-nino" onclick="navegarA('nino')" class="nav-btn px-5 py-2 rounded-xl text-sm font-semibold text-slate-600 hover:text-pastel-deepSky hover:bg-white transition-all">
+                    🌊 2. El Niño
+                </button>
+                <button id="nav-super-nino" onclick="navegarA('super-nino')" class="nav-btn px-5 py-2 rounded-xl text-sm font-semibold text-slate-600 hover:text-pastel-warmOrange hover:bg-white transition-all">
+                    ⚡ 3. Súper Niño
+                </button>
+            </nav>
+
+            <!-- Etiqueta decorativa del proyecto -->
+            <div class="hidden sm:block">
+                <span class="text-xs font-bold px-3 py-1.5 bg-pastel-cream text-amber-900 rounded-full border border-amber-200/80">
+                    Proyecto Escolar
+                </span>
+            </div>
+
+            <!-- Botón Menú Móvil -->
+            <button onclick="toggleMenuMovil()" class="md:hidden p-2 text-slate-600 hover:text-slate-900 focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Menú Desplegable Móvil -->
+        <div id="menu-movil" class="hidden md:hidden bg-white border-b border-slate-200 px-4 py-3 space-y-2 shadow-lg">
+            <button onclick="navegarA('inicio')" class="w-full text-left px-4 py-2.5 rounded-xl text-sm font-bold bg-pastel-sky text-pastel-deepSky">
+                🏠 1. Portada / Inicio
+            </button>
+            <button onclick="navegarA('nino')" class="w-full text-left px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-700 hover:bg-slate-50">
+                🌊 2. El Niño
+            </button>
+            <button onclick="navegarA('super-nino')" class="w-full text-left px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-700 hover:bg-slate-50">
+                ⚡ 3. Súper Niño
+            </button>
+        </div>
+    </header>
+
+
+    <!-- ========================================================= -->
+    <!-- PÁGINA 1: PORTADA / INICIO                                -->
+    <!-- ========================================================= -->
+    <main id="pagina-inicio" class="pagina-seccion flex-grow flex items-center py-10 sm:py-16">
+        <div class="max-w-7xl mx-auto px-6 sm:px-12 w-full">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+                
+                <!-- Columna de texto principal -->
+                <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                    <div class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-sky-100 to-amber-100/80 rounded-full border border-sky-200/50">
+                        <span class="text-sm">🌊</span>
+                        <span class="text-xs font-bold text-slate-700 tracking-wide uppercase">Fenómeno Climático Global</span>
+                    </div>
+
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 leading-tight tracking-tight">
+                        Fenómeno del <span class="text-pastel-deepSky">Niño</span> <br class="hidden sm:inline"/>
+                        & <span class="text-pastel-warmOrange">Súper Niño</span>
+                    </h1>
+
+                    <p class="text-slate-600 text-base sm:text-lg leading-relaxed max-w-2xl mx-auto lg:mx-0">
+                        Descubre cómo el calentamiento de las aguas del Océano Pacífico transforma el clima del planeta, desencadenando lluvias intensas, sequías e impactos en todo el mundo.
+                    </p>
+
+                    <div class="pt-4 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+                        <button onclick="navegarA('nino')" class="w-full sm:w-auto bg-pastel-deepSky hover:bg-sky-700 text-white font-semibold px-8 py-4 rounded-2xl shadow-md hover:shadow-lg transition-all text-center text-sm sm:text-base flex items-center justify-center gap-2">
+                            <span>Página 2: Ver El Niño</span>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                            </svg>
+                        </button>
+                        <button onclick="navegarA('super-nino')" class="w-full sm:w-auto bg-white hover:bg-slate-50 text-slate-700 font-semibold px-8 py-4 rounded-2xl border border-slate-200 transition-all text-center text-sm sm:text-base">
+                            Página 3: Ver Súper Niño
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Columna visual decorativa -->
+                <div class="lg:col-span-5 relative flex justify-center">
+                    <div class="relative w-full max-w-md">
+                        <!-- Tarjeta Principal con Imagen -->
+                        <div class="bg-white p-4 sm:p-5 rounded-3xl soft-shadow border border-slate-100/80 transform rotate-1 transition-transform hover:rotate-0 duration-300">
+                            <div class="relative overflow-hidden rounded-2xl">
+                                <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80" 
+                                     alt="Océano Pacífico" 
+                                     class="w-full h-64 sm:h-72 object-cover"
+                                     onerror="this.onerror=null; this.src='https://placehold.co/800x600/e0f2fe/0284c7?text=Oceano+Pacifico';">
+                                <div class="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-transparent to-transparent"></div>
+                                <span class="absolute bottom-3 left-3 bg-white/90 backdrop-blur-md text-slate-800 text-xs font-bold px-3 py-1.5 rounded-xl">
+                                    🌊 Océano Pacífico Ecuatorial
+                                </span>
+                            </div>
+                            
+                            <div class="mt-4 grid grid-cols-2 gap-3">
+                                <div class="bg-pastel-sky/60 p-3 rounded-2xl border border-sky-100 text-center">
+                                    <span class="text-xs text-slate-500 font-medium block">Calentamiento</span>
+                                    <span class="text-sm font-extrabold text-pastel-deepSky">+0.5°C a +2.5°C</span>
+                                </div>
+                                <div class="bg-pastel-cream/80 p-3 rounded-2xl border border-amber-100 text-center">
+                                    <span class="text-xs text-slate-500 font-medium block">Frecuencia</span>
+                                    <span class="text-sm font-extrabold text-amber-800">2 a 7 años</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Elementos flotantes -->
+                        <div class="absolute -top-6 -left-6 bg-white p-3.5 rounded-2xl shadow-lg border border-slate-100 flex items-center space-x-3 float-animation">
+                            <span class="text-2xl">☀️</span>
+                            <div>
+                                <p class="text-xs font-bold text-slate-800">Anomalía Térmica</p>
+                                <p class="text-[10px] text-slate-500">Aguas más cálidas</p>
+                            </div>
+                        </div>
+
+                        <div class="absolute -bottom-6 -right-4 bg-white p-3.5 rounded-2xl shadow-lg border border-slate-100 flex items-center space-x-3">
+                            <span class="text-2xl">🌧️</span>
+                            <div>
+                                <p class="text-xs font-bold text-slate-800">Clima Extremo</p>
+                                <p class="text-[10px] text-slate-500">Lluvias y Sequías</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+
+    <!-- ========================================================= -->
+    <!-- PÁGINA 2: EL FENÓMENO DEL NIÑO                            -->
+    <!-- ========================================================= -->
+    <main id="pagina-nino" class="pagina-seccion hidden flex-grow py-12">
+        <div class="max-w-7xl mx-auto px-6 sm:px-12 w-full space-y-10">
+            
+            <!-- Encabezado de Página 2 -->
+            <div class="text-center max-w-3xl mx-auto space-y-3">
+                <span class="text-xs font-bold px-3.5 py-1.5 bg-pastel-sky text-pastel-deepSky rounded-full">Página 2</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">¿Qué es el Fenómeno del Niño?</h2>
+                <p class="text-slate-600 text-sm sm:text-base">
+                    Es una fase cálida del ciclo natural conocido como **ENOS** (El Niño-Oscilación del Sur). Ocurre cuando los vientos alisios se debilitan y las aguas cálidas se desplazan hacia las costas de América del Sur.
+                </p>
+            </div>
+
+            <!-- Grilla de Tarjetas Educativas -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                
+                <!-- Tarjeta 1 -->
+                <div class="bg-white p-6 rounded-3xl soft-shadow border border-slate-100 space-y-4">
+                    <div class="w-12 h-12 bg-pastel-sky rounded-2xl flex items-center justify-center text-2xl">
+                        💨
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-800">1. Debilitamiento de Vientos</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        Los vientos alisios que normalmente empujan las aguas cálidas hacia Asia se debilitan. Esto permite que el agua caliente acumulada regrese hacia las costas americanas.
+                    </p>
+                </div>
+
+                <!-- Tarjeta 2 -->
+                <div class="bg-white p-6 rounded-3xl soft-shadow border border-slate-100 space-y-4">
+                    <div class="w-12 h-12 bg-pastel-cream rounded-2xl flex items-center justify-center text-2xl">
+                        🌡️
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-800">2. Calentamiento Marino</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        La temperatura superficial del mar aumenta más de 0.5 °C en el Pacífico ecuatorial durante al menos 5 meses consecutivos.
+                    </p>
+                </div>
+
+                <!-- Tarjeta 3 -->
+                <div class="bg-white p-6 rounded-3xl soft-shadow border border-slate-100 space-y-4">
+                    <div class="w-12 h-12 bg-orange-100 rounded-2xl flex items-center justify-center text-2xl">
+                        ⛈️
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-800">3. Cambio Atmosférico</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        La evaporación masiva genera nubes gigantescas de tormenta, alterando la circulación del aire y modificando el clima en todo el planeta.
+                    </p>
+                </div>
+
+            </div>
+
+            <!-- Botón para avanzar a la página 3 -->
+            <div class="text-center pt-4">
+                <button onclick="navegarA('super-nino')" class="inline-flex items-center gap-2 bg-pastel-warmOrange text-white font-semibold px-8 py-3.5 rounded-2xl shadow-md hover:bg-orange-600 transition-all text-sm">
+                    <span>Siguiente: Conocer el Súper Niño (Página 3)</span>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                    </svg>
+                </button>
+            </div>
+
+        </div>
+    </main>
+
+
+    <!-- ========================================================= -->
+    <!-- PÁGINA 3: EL SÚPER NIÑO                                   -->
+    <!-- ========================================================= -->
+    <main id="pagina-super-nino" class="pagina-seccion hidden flex-grow py-12">
+        <div class="max-w-7xl mx-auto px-6 sm:px-12 w-full space-y-10">
+            
+            <!-- Encabezado de Página 3 -->
+            <div class="text-center max-w-3xl mx-auto space-y-3">
+                <span class="text-xs font-bold px-3.5 py-1.5 bg-amber-100 text-amber-900 rounded-full">Página 3</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">El Evento "Súper Niño"</h2>
+                <p class="text-slate-600 text-sm sm:text-base">
+                    Un **Súper Niño** es una versión extraordinaria y devastadora del fenómeno, donde las temperaturas del océano superan los **+2.0 °C** por encima de lo normal.
+                </p>
+            </div>
+
+            <!-- Comparativa Histórica de Eventos -->
+            <div class="bg-gradient-to-br from-amber-50 to-orange-50/60 p-6 sm:p-8 rounded-3xl border border-amber-200/60 soft-shadow space-y-6">
+                <h3 class="text-2xl font-bold text-slate-800 text-center sm:text-left">⚡ Eventos Históricos Más Intensos</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-white p-5 rounded-2xl border border-amber-100">
+                        <span class="text-xs font-bold text-amber-700 block">Evento 1982 - 1983</span>
+                        <h4 class="text-lg font-bold text-slate-900 mt-1">Súper Niño Histórico</h4>
+                        <p class="text-xs text-slate-600 mt-2 leading-relaxed">Causó fuertes lluvias e inundaciones en América del Sur y graves sequías en Australia e Indonesia.</p>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-2xl border border-amber-100">
+                        <span class="text-xs font-bold text-amber-700 block">Evento 1997 - 1998</span>
+                        <h4 class="text-lg font-bold text-slate-900 mt-1">El Niño del Siglo</h4>
+                        <p class="text-xs text-slate-600 mt-2 leading-relaxed">Uno de los más documentados, con récords de temperatura en el agua e impacto masivo en la agricultura global.</p>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-2xl border border-amber-100">
+                        <span class="text-xs font-bold text-amber-700 block">Evento 2015 - 2016</span>
+                        <h4 class="text-lg font-bold text-slate-900 mt-1">Súper Niño Reciente</h4>
+                        <p class="text-xs text-slate-600 mt-2 leading-relaxed">Provocó blanqueamiento masivo de corales y anomalías extremas de temperatura a nivel global.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botones de Navegación -->
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
+                <button onclick="navegarA('nino')" class="w-full sm:w-auto bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-semibold px-6 py-3.5 rounded-2xl text-sm transition-all">
+                    ← Volver a Página 2 (El Niño)
+                </button>
+                <button onclick="navegarA('inicio')" class="w-full sm:w-auto bg-pastel-deepSky text-white font-semibold px-6 py-3.5 rounded-2xl text-sm transition-all shadow-md">
+                    🏠 Ir a la Portada Principal
+                </button>
+            </div>
+
+        </div>
+    </main>
+
+
+    <!-- ========================================================= -->
+    <!-- PIE DE PÁGINA COMÚN                                       -->
+    <!-- ========================================================= -->
+    <footer class="w-full py-6 px-6 border-t border-slate-200/60 bg-white/60 backdrop-blur-sm mt-auto">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-2">
+            <p>© 2026 Proyecto Escolar — Fenómeno del Niño y Súper Niño</p>
+            <div class="flex space-x-4">
+                <button onclick="navegarA('inicio')" class="hover:text-pastel-deepSky">1. Inicio</button>
+                <button onclick="navegarA('nino')" class="hover:text-pastel-deepSky">2. El Niño</button>
+                <button onclick="navegarA('super-nino')" class="hover:text-pastel-deepSky">3. Súper Niño</button>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- ========================================================= -->
+    <!-- JAVASCRIPT DE NAVEGACIÓN ENTRE PÁGINAS                   -->
+    <!-- ========================================================= -->
+    <script>
+        // Función principal para cambiar de página de forma dinámica
+        function navegarA(idPagina) {
+            // 1. Ocultar todas las páginas
+            const paginas = document.querySelectorAll('.pagina-seccion');
+            paginas.forEach(p => p.classList.add('hidden'));
+
+            // 2. Mostrar la página seleccionada
+            const paginaObjetivo = document.getElementById(`pagina-${idPagina}`);
+            if (paginaObjetivo) {
+                paginaObjetivo.classList.remove('hidden');
+            }
+
+            // 3. Actualizar estado visual de los botones del menú de navegación
+            const botones = document.querySelectorAll('.nav-btn');
+            botones.forEach(btn => {
+                btn.className = "nav-btn px-5 py-2 rounded-xl text-sm font-semibold text-slate-600 hover:bg-white transition-all";
+            });
+
+            const btnActivo = document.getElementById(`nav-${idPagina}`);
+            if (btnActivo) {
+                btnActivo.className = "nav-btn px-5 py-2 rounded-xl text-sm font-bold bg-pastel-deepSky text-white shadow-sm transition-all";
+            }
+
+            // 4. Cerrar menú móvil si estuviera abierto
+            document.getElementById('menu-movil').classList.add('hidden');
+
+            // 5. Mover suavemente la vista al inicio arriba
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Mostrar / Ocultar menú en teléfonos móviles
+        function toggleMenuMovil() {
+            const menu = document.getElementById('menu-movil');
+            menu.classList.toggle('hidden');
+        }
+    </script>
+
+</body>
+</html>
